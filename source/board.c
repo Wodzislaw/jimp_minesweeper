@@ -11,6 +11,7 @@ char board_mode()
         
     printf("Podaj tryb gry (e - easy, m - medium, h - hard, c - custom): ");
     mode = getc(stdin);
+    //getc(stdin);
     //int result = scanf("%c", &mode);
 
     //printf("Tryb %c\n", mode);
@@ -52,6 +53,12 @@ int board_int()
     fgets(temp, sizeof(temp), stdin);
     int x = atoi(temp);
 
+    if(x>=10)
+    {
+        fgets(temp, sizeof(temp), stdin);
+    }
+
+    //scanf("%c");
     //printf("%d\n", x);
 
     if(x>0)
@@ -78,8 +85,9 @@ void board_init(board_t *board)
         }
         else
         {
-            sleep(1);
-            system("@cls||clear");
+            //sleep(1);
+            //system("@cls||clear");
+            getc(stdin);
         }
     }
     
@@ -101,6 +109,7 @@ void board_init(board_t *board)
     }
     else
     {
+        //scanf("%c");
         bool correct=false;
         char temp[4];
 
@@ -123,7 +132,7 @@ void board_init(board_t *board)
         }
 
         correct=false;
-        fgets(temp, sizeof(temp), stdin);
+        //fgets(temp, sizeof(temp), stdin);
 
         while(correct==false)
         {
@@ -142,7 +151,7 @@ void board_init(board_t *board)
         }
 
         correct=false;
-        fgets(temp, sizeof(temp), stdin);
+        //fgets(temp, sizeof(temp), stdin);
 
         while(correct==false)
         {
@@ -161,15 +170,16 @@ void board_init(board_t *board)
         }
     }
 
-    //printf("x = %d\n", x);
-    //printf("y = %d\n", y);
-    //printf("t = %d\n", time);
+    printf("x = %d\n", x);
+    printf("y = %d\n", y);
+    printf("t = %d\n", time);
 
     board->x=x;
     board->y=y;
     board->time=time;
     board->content=malloc(x * y * sizeof(char));
     board->state=malloc(x * y * sizeof(char));
+    board->bomb_ammount=malloc(x * y * sizeof(int));
 
     return;
 }

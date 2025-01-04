@@ -12,7 +12,10 @@ int main()
     board_t board;
     board_init(&board);
 
-    
+    printf("\n");
+    printf("x = %d\n", board.x);
+    printf("y = %d\n", board.y);
+    printf("t = %d\n", board.time);
 
     return EXIT_SUCCESS;
 }

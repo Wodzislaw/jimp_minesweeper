@@ -10,6 +10,7 @@ typedef struct
     int time; // czas w minutach
     char *content; // zawartosc pola
     char *state; // stan pola
+    int *bomb_ammount; // ilosc bomb w obszarze 3x3
 } board_t;
 
 void board_init(board_t *board);
