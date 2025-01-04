@@ -1,23 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+//#include <stdbool.h>
+
+#include "board.h"
 
 int main()
 {
-    char x;
-    printf("Podaj funkcję jaką chcesz wykonać: ");
-    int result = scanf("%c", &x);
+    system("@cls||clear");
 
-    if(result==1)
-    {
-        printf("Funkcja %c\n", x);
-    }
-    else
-    {
-        printf("Niepoprawne dane");
-    }
+    board_t board;
+    board_init(&board);
 
-
-
+    
 
     return EXIT_SUCCESS;
 }
