@@ -206,4 +206,55 @@ void board_init(board_t *board)
     return;
 }
 
+void board_fill(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
 
+    for(int i=0; i<x; i++)
+    {
+        for(int j=0; j<y; j++)
+        {
+            board->state[j+i*y]='0';
+        }
+    }
+}
+
+void board_out(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+
+    printf("     ");
+
+    for(int i=0; i<y; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d ", i+1);
+    }
+
+    printf("  y\n\n");
+
+    for(int i=0; i<x; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d   ", i+1);
+
+        for(int j=0; j<y; j++)
+        {
+            printf(" %c ", board->state[j+i*y]);
+        }
+
+        printf("\n");
+    }
+
+    printf("\n x\n");
+}
