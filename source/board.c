@@ -93,19 +93,19 @@ void board_init(board_t *board)
     
     //printf("poprawne %c\n", temp);
 
-    int x, y, time;
+    int x, y, time, mult, field;
 
     if(temp=='e')
     {
-        x=9, y=9, time=10;
+        x=9, y=9, time=10, mult=1;
     }
     else if(temp=='m')
     {
-        x=16, y=16, time=40;
+        x=16, y=16, time=40, mult=2;
     }
     else if(temp=='h')
     {
-        x=16, y=30, time=99;
+        x=16, y=30, time=99, mult=3;
     }
     else
     {
@@ -168,15 +168,37 @@ void board_init(board_t *board)
                 printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
             }
         }
+
+        field=x*y;
+
+        if(field<=81)
+        {
+            mult=1;
+        }
+        else if(field<=256)
+        {
+            mult=2;
+        }
+        else if(field<=480)
+        {
+            mult=3;
+        }
+        else
+        {
+            mult=4;
+        }
     }
 
     printf("x = %d\n", x);
     printf("y = %d\n", y);
     printf("t = %d\n", time);
+    printf("f = %d\n", field);
+    printf("m = %d\n", mult);
 
     board->x=x;
     board->y=y;
     board->time=time;
+    board->mult=mult;
     board->content=malloc(x * y * sizeof(char));
     board->state=malloc(x * y * sizeof(char));
     board->bomb_ammount=malloc(x * y * sizeof(int));

@@ -8,6 +8,7 @@ typedef struct
     int x; // liczba wierszy
     int y; // liczba kolumn
     int time; // czas w minutach
+    int mult; // mnożnik punktów
     char *content; // zawartosc pola
     char *state; // stan pola
     int *bomb_ammount; // ilosc bomb w obszarze 3x3
