@@ -20,10 +20,12 @@ void board_state_fill(board_t *board);
 
 void board_content_fill(board_t *board);
 
+void board_bomb_ammount_fill(board_t *board);
+
 void board_state_out(board_t *board);
 
 void board_content_out(board_t *board);
 
-
+void board_bomb_ammount_out(board_t *board);
 
 #endif

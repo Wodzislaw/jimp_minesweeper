@@ -23,5 +23,9 @@ int main()
     board_content_fill(&board);
     board_content_out(&board);
 
+    board_bomb_ammount_fill(&board);
+    board_bomb_ammount_out(&board);
+    
+
     return EXIT_SUCCESS;
 }

@@ -249,6 +249,315 @@ void board_content_fill(board_t *board)
     }
 }
 
+/*
+void board_bomb_ammount_fill(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+    int field=x*y;
+
+    for(int i=0; i<field; i++)
+    {
+        if(i%y!=0)
+        {
+            if(i-y-1 >= 0)
+            {
+                board->bomb_ammount[i]++;
+            }
+
+            if(i-1 >= 0)
+            {
+                board->bomb_ammount[i]++;
+            }
+
+            if(i+y-1 < field)
+            {
+                board->bomb_ammount[i]++;
+            }
+        }
+
+
+        if(i-y >= 0)
+        {
+            board->bomb_ammount[i]++;
+        }
+
+        if(i+y < field)
+        {
+            board->bomb_ammount[i]++;
+        }
+
+
+        if(i%(y-1)!=0)
+        {
+            if(i-y+1 >= 0)
+            {
+                board->bomb_ammount[i]++;
+            }
+
+            if(i+1 < field)
+            {
+                board->bomb_ammount[i]++;
+            }
+
+            if(i+y+1 < field)
+            {
+                board->bomb_ammount[i]++;
+            }
+        }
+    }
+}
+*/
+
+void board_bomb_ammount_fill(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+    int pos;
+
+    for(int i=0; i<x; i++)
+    {
+        for(int j=0; j<y; j++)
+        {
+            pos=i*y+j;
+
+            if(i==0)
+            {
+                if(j==0)
+                {
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else if(j==y-1)
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+            }
+            else if(i==x-1)
+            {
+                if(j==0)
+                {
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else if(j==y-1)
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+            }
+            else
+            {
+                if(j==0)
+                {
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else if(j==y-1)
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+                else
+                {
+                    if(board->content[pos-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos+y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y-1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+
+                    if(board->content[pos-y+1]=='B')
+                    {
+                        board->bomb_ammount[pos]++;
+                    }
+                }
+            }
+
+            if(board->content[pos]=='B')
+            {
+                board->bomb_ammount[pos]++;
+            }
+
+        }
+    }
+}
+
 void board_state_out(board_t *board)
 {
     int x=board->x;
@@ -319,6 +628,45 @@ void board_content_out(board_t *board)
         for(int j=0; j<y; j++)
         {
             printf(" %c ", board->content[j+i*y]);
+        }
+
+        printf("\n");
+    }
+
+    printf("\n x\n");
+}
+
+void board_bomb_ammount_out(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+
+    printf("     ");
+
+    for(int i=0; i<y; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d ", i+1);
+    }
+
+    printf("  y\n\n");
+
+    for(int i=0; i<x; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d   ", i+1);
+
+        for(int j=0; j<y; j++)
+        {
+            printf(" %d ", board->bomb_ammount[j+i*y]);
         }
 
         printf("\n");
