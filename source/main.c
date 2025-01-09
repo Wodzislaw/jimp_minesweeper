@@ -17,8 +17,11 @@ int main()
     printf("y = %d\n", board.y);
     printf("t = %d\n", board.time);
 
-    board_fill(&board);
-    board_out(&board);
+    board_state_fill(&board);
+    board_state_out(&board);
+
+    board_content_fill(&board);
+    board_content_out(&board);
 
     return EXIT_SUCCESS;
 }

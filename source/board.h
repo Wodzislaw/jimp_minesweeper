@@ -16,9 +16,14 @@ typedef struct
 
 void board_init(board_t *board);
 
-void board_fill(board_t *board);
+void board_state_fill(board_t *board);
 
-void board_out(board_t *board);
+void board_content_fill(board_t *board);
+
+void board_state_out(board_t *board);
+
+void board_content_out(board_t *board);
+
 
 
 #endif

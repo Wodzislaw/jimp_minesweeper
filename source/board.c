@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <time.h>
 
 char board_mode()
 {
@@ -98,14 +99,17 @@ void board_init(board_t *board)
     if(temp=='e')
     {
         x=9, y=9, time=10, mult=1;
+        field=x*y;
     }
     else if(temp=='m')
     {
         x=16, y=16, time=40, mult=2;
+        field=x*y;
     }
     else if(temp=='h')
     {
         x=16, y=30, time=99, mult=3;
+        field=x*y;
     }
     else
     {
@@ -195,6 +199,10 @@ void board_init(board_t *board)
     printf("f = %d\n", field);
     printf("m = %d\n", mult);
 
+    //int bombs=field/5;
+
+    //printf("b = %d\n", bombs);
+
     board->x=x;
     board->y=y;
     board->time=time;
@@ -206,7 +214,7 @@ void board_init(board_t *board)
     return;
 }
 
-void board_fill(board_t *board)
+void board_state_fill(board_t *board)
 {
     int x=board->x;
     int y=board->y;
@@ -215,12 +223,33 @@ void board_fill(board_t *board)
     {
         for(int j=0; j<y; j++)
         {
-            board->state[j+i*y]='0';
+            board->state[j+i*y]='#';
         }
     }
 }
 
-void board_out(board_t *board)
+void board_content_fill(board_t *board)
+{
+    int field=board->x * board->y;
+
+    srand(time(NULL));
+    int random;
+    for(int i=0; i<field; i++)
+    {
+        random=rand() % 100 + 1;
+        
+        if(random<=20)
+        {
+            board->content[i]='B';
+        }
+        else
+        {
+            board->content[i]='N';
+        }
+    }
+}
+
+void board_state_out(board_t *board)
 {
     int x=board->x;
     int y=board->y;
@@ -251,6 +280,45 @@ void board_out(board_t *board)
         for(int j=0; j<y; j++)
         {
             printf(" %c ", board->state[j+i*y]);
+        }
+
+        printf("\n");
+    }
+
+    printf("\n x\n");
+}
+
+void board_content_out(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+
+    printf("     ");
+
+    for(int i=0; i<y; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d ", i+1);
+    }
+
+    printf("  y\n\n");
+
+    for(int i=0; i<x; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d   ", i+1);
+
+        for(int j=0; j<y; j++)
+        {
+            printf(" %c ", board->content[j+i*y]);
         }
 
         printf("\n");
