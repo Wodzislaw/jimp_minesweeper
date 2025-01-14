@@ -23,7 +23,7 @@ char board_mode()
     }
     else
     {
-        printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
+        printf("[!]: Niepoprawne wyrazenie, sprobuj ponownie\n");
         return 'x';
     }
 }
@@ -131,7 +131,7 @@ void board_init(board_t *board)
             }
             else
             {
-                printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
+                printf("[!]: Niepoprawne wyrazenie, sprobuj ponownie\n");
             }
         }
 
@@ -150,7 +150,7 @@ void board_init(board_t *board)
             }
             else
             {
-                printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
+                printf("[!]: Niepoprawne wyrazenie, sprobuj ponownie\n");
             }
         }
 
@@ -210,6 +210,7 @@ void board_init(board_t *board)
     board->content=malloc(x * y * sizeof(char));
     board->state=malloc(x * y * sizeof(char));
     board->bomb_ammount=malloc(x * y * sizeof(int));
+    board->game="ongoing";
 
     return;
 }
@@ -588,7 +589,14 @@ void board_state_out(board_t *board)
 
         for(int j=0; j<y; j++)
         {
-            printf(" %c ", board->state[j+i*y]);
+            if(board->state[j+i*y]==' ' && board->bomb_ammount[j+i*y]!=0)
+            {
+                printf(" %d ", board->bomb_ammount[j+i*y]);
+            }
+            else
+            {
+                printf(" %c ", board->state[j+i*y]);
+            }
         }
 
         printf("\n");
@@ -673,4 +681,100 @@ void board_bomb_ammount_out(board_t *board)
     }
 
     printf("\n x\n");
+}
+
+void board_interact(board_t *board)
+{
+    char function;
+    int x, y;
+    bool correct=false;
+        
+    //printf("Podaj operację którą chcesz wykonać (f - flaga, r - odsłoń pole): ");
+    //getc(stdin);
+    //function=getc(stdin);
+    
+    while(correct==false)
+    {
+        printf("Podaj operację którą chcesz wykonać (f - flaga, r - odsłoń pole): ");
+        getc(stdin);
+        function=getc(stdin);
+
+        if(function=='f' || function=='r')
+        {
+            correct=true;
+        }
+        else
+        {
+            printf("[!]: Niepoprawne wyrażenie, spróbuj ponownie\n");
+        }
+    }
+
+    char temp[4];
+
+    fgets(temp, sizeof(temp), stdin);
+
+    correct=false;
+
+    while(correct==false)
+    {
+        printf("Podaj x: ");
+        x=board_int();
+
+        if(x!=0 && x<=board->x)
+        {
+            correct=true;
+        }
+        else
+        {
+            printf("[!]: Niepoprawne wyrażenie, spróbuj ponownie\n");
+        }
+    }
+
+    correct=false;
+
+    while(correct==false)
+    {
+        printf("Podaj y: ");
+        y=board_int();
+
+        if(y!=0 && y<=board->y)
+        {
+            correct=true;
+        }
+        else
+        {
+            printf("[!]: Niepoprawne wyrażenie, spróbuj ponownie\n");
+        }
+    }
+
+    printf("%c\n", function);
+    printf("%d\n", x);
+    printf("%d\n", y);
+
+    int pos=(x-1)*board->y + (y-1);
+
+    printf("%d\n", pos);
+
+    if(function=='f')
+    {
+        if(board->state[pos]=='#')
+        {
+            board->state[pos]='f';
+        }
+        else if(board->state[pos]=='f')
+        {
+            board->state[pos]='#';
+        }
+    }
+    else
+    {
+        if(board->content[pos]=='B')
+        {
+            board->game="lost";
+        }
+        else
+        {
+            board->state[pos]=' ';
+        }
+    }
 }

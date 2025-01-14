@@ -26,6 +26,11 @@ int main()
     board_bomb_ammount_fill(&board);
     board_bomb_ammount_out(&board);
     
+    board_interact(&board);
+
+    board_state_out(&board);
+
+    printf("%s\n", board.game);
 
     return EXIT_SUCCESS;
 }

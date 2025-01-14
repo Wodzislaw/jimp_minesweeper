@@ -12,6 +12,7 @@ typedef struct
     char *content; // zawartosc pola
     char *state; // stan pola
     int *bomb_ammount; // ilosc bomb w obszarze 3x3
+    char* game; // win, lose albo ongoing
 } board_t;
 
 void board_init(board_t *board);
@@ -27,5 +28,7 @@ void board_state_out(board_t *board);
 void board_content_out(board_t *board);
 
 void board_bomb_ammount_out(board_t *board);
+
+void board_interact(board_t *board);
 
 #endif
