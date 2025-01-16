@@ -193,11 +193,14 @@ void board_init(board_t *board)
         }
     }
 
+
+    /*
     printf("x = %d\n", x);
     printf("y = %d\n", y);
     printf("t = %d\n", time);
     printf("f = %d\n", field);
     printf("m = %d\n", mult);
+    */
 
     //int bombs=field/5;
 
@@ -210,7 +213,16 @@ void board_init(board_t *board)
     board->content=malloc(x * y * sizeof(char));
     board->state=malloc(x * y * sizeof(char));
     board->bomb_ammount=malloc(x * y * sizeof(int));
-    board->game="ongoing";
+    board->game=2;
+
+    if(temp=='c')
+    {
+        board->first=0;
+    }
+    else
+    {
+        board->first=1;
+    }
 
     return;
 }
@@ -239,7 +251,7 @@ void board_content_fill(board_t *board)
     {
         random=rand() % 100 + 1;
         
-        if(random<=20)
+        if(random<=15)
         {
             board->content[i]='B';
         }
@@ -696,7 +708,13 @@ void board_interact(board_t *board)
     while(correct==false)
     {
         printf("Podaj operację którą chcesz wykonać (f - flaga, r - odsłoń pole): ");
-        getc(stdin);
+
+        if(board->first==1)
+        {
+            getc(stdin);
+            board->first=0;
+        }
+        //getc(stdin);
         function=getc(stdin);
 
         if(function=='f' || function=='r')
@@ -747,16 +765,25 @@ void board_interact(board_t *board)
         }
     }
 
+    //fgets(temp, sizeof(temp), stdin);
+
+    board->current_x=x-1;
+    board->current_y=y-1;
+
+    /*
     printf("%c\n", function);
     printf("%d\n", x);
     printf("%d\n", y);
+    */
 
     int pos=(x-1)*board->y + (y-1);
 
-    printf("%d\n", pos);
+    //printf("%d\n", pos);
 
     if(function=='f')
     {
+        //board->last_action='f';
+
         if(board->state[pos]=='#')
         {
             board->state[pos]='f';
@@ -768,13 +795,220 @@ void board_interact(board_t *board)
     }
     else
     {
+        //board->last_action='r';
+
         if(board->content[pos]=='B')
         {
-            board->game="lost";
+            board->game=1;
         }
         else
         {
             board->state[pos]=' ';
+
+            if(board->bomb_ammount[pos]==0)
+            {
+                board_shatter(board);
+            }
         }
     }
+
+
+}
+
+void board_shatter(board_t *board)
+{
+    // printf("%d, %d\n", board->current_x, board->current_y);
+
+    int pos=board->current_x * board->y + board->current_y;
+    int current_pos;
+
+    //printf("%d, %d, %d\n", board->current_x, board->current_y, pos);
+
+    bool up=true, left=true, right=true, down=true;
+    bool end=false;
+
+    for(int i=0; i<board->x; i++)
+    {
+        for(int j=0; j<board->y; j++)
+        {
+            current_pos=i*board->y + j;
+
+            if(current_pos==pos)
+            {
+                if(j==0)
+                {
+                    left=false;
+                }
+
+                if(j==board->y-1)
+                {
+                    right=false;
+                }
+
+                if(i==0)
+                {
+                    up=false;
+                }
+
+                if(i==board->x-1)
+                {
+                    down=false;
+                }
+
+                if(left==true)
+                {
+                    if(board->bomb_ammount[current_pos-1]==0 && board->state[current_pos-1]=='#')
+                    {
+                        board->state[current_pos-1]=' ';
+
+                        board->current_x=i;
+                        board->current_y=j-1;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(right==true)
+                {
+                    if(board->bomb_ammount[current_pos+1]==0 && board->state[current_pos+1]=='#')
+                    {
+                        board->state[current_pos+1]=' ';
+
+                        board->current_x=i;
+                        board->current_y=j+1;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(up==true)
+                {
+                    if(board->bomb_ammount[current_pos - board->y]==0 && board->state[current_pos - board->y]=='#')
+                    {
+                        board->state[current_pos-board->y]=' ';
+
+                        board->current_x=i-1;
+                        board->current_y=j;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(down==true)
+                {
+                    if(board->bomb_ammount[current_pos + board->y]==0 && board->state[current_pos + board->y]=='#')
+                    {
+                        board->state[current_pos+board->y]=' ';
+
+                        board->current_x=i+1;
+                        board->current_y=j;
+
+                        board_shatter(board);
+                    }
+                }
+
+                end=true;
+                break;
+            }
+        }
+        if(end==true)
+        {
+            break;
+        }
+    }
+
+    if(left==true)
+    {
+        board->state[current_pos-1]=' ';
+    }
+
+    if(right==true)
+    {
+        board->state[current_pos+1]=' ';
+    }
+
+    if(up==true)
+    {
+        board->state[current_pos-board->y]=' ';
+    }
+
+    if(down==true)
+    {
+        board->state[current_pos+board->y]=' ';
+    }
+
+}
+
+void board_check_win(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+    int size=x*y;
+
+    for(int i=0; i<size; i++)
+    {
+        if(board->content[i]=='B')
+        {
+            if(board->state[i]!='f')
+            {
+                board->game=2;
+                return;
+            }
+        }
+    }
+
+    board->game=0;
+}
+
+void board_lose_out(board_t *board)
+{
+    int x=board->x;
+    int y=board->y;
+
+    printf("     ");
+
+    for(int i=0; i<y; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d ", i+1);
+    }
+
+    printf("  y\n\n");
+
+    for(int i=0; i<x; i++)
+    {
+        if(i+1<10)
+        {
+            printf(" ");
+        }
+
+        printf("%d   ", i+1);
+
+        for(int j=0; j<y; j++)
+        {
+            if(board->state[j+i*y]==' ' && board->bomb_ammount[j+i*y]!=0)
+            {
+                printf(" %d ", board->bomb_ammount[j+i*y]);
+            }
+            else
+            {
+                if(board->content[j+i*y]=='B')
+                {
+                    printf(" B ");
+                }
+                else
+                {
+                    printf(" %c ", board->state[j+i*y]);
+                }
+            }
+        }
+
+        printf("\n");
+    }
+
+    printf("\n x\n");
 }
