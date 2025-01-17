@@ -219,6 +219,7 @@ void board_init(board_t *board)
     board->state=malloc(x * y * sizeof(char));
     board->bomb_ammount=malloc(x * y * sizeof(int));
     board->game=2;
+    board->actual_first=1;
 
     if(temp=='c')
     {
@@ -281,12 +282,12 @@ void board_content_fill(board_t *board)
     {
         random=rand() % field + 1;
 
-        if(random<=bombs)
+        if(random<=bombs && i!=board->first_position)
         {
             bombs--;
             board->content[i]='B';
         }
-        else if(random>bombs)
+        else
         {
             board->content[i]='N';
         }
@@ -609,6 +610,9 @@ void board_state_out(board_t *board)
     int x=board->x;
     int y=board->y;
 
+    printf("Punkty: %d\n\n", board->points);
+
+
     printf("     ");
 
     for(int i=0; i<y; i++)
@@ -813,6 +817,11 @@ void board_interact(board_t *board)
 
     //printf("%d\n", pos);
 
+    if(board->actual_first==1)
+    {
+        board->first_position=pos;
+    }
+
     if(function=='f')
     {
         //board->last_action='f';
@@ -829,6 +838,10 @@ void board_interact(board_t *board)
     else
     {
         //board->last_action='r';
+        if(board->state[pos]==' ')
+        {
+            return;
+        }
 
         if(board->content[pos]=='B')
         {
@@ -838,9 +851,14 @@ void board_interact(board_t *board)
         {
             board->state[pos]=' ';
 
-            if(board->bomb_ammount[pos]==0)
+            board->points+=board->mult;
+
+            if(board->actual_first!=1)
             {
-                board_shatter(board);
+                if(board->bomb_ammount[pos]==0)
+                {
+                    board_shatter(board);
+                }
             }
         }
     }
@@ -859,6 +877,8 @@ void board_shatter(board_t *board)
 
     bool up=true, left=true, right=true, down=true;
     bool end=false;
+
+    bool up_left=false, up_right=false, down_left=false, down_right=false;
 
     for(int i=0; i<board->x; i++)
     {
@@ -888,6 +908,26 @@ void board_shatter(board_t *board)
                     down=false;
                 }
 
+                if(left==true && up==true)
+                {
+                    up_left=true;
+                }
+
+                if(right==true && up==true)
+                {
+                    up_right=true;
+                }
+
+                if(left==true && down==true)
+                {
+                    down_left=true;
+                }
+
+                if(right==true && down==true)
+                {
+                    down_right=true;
+                }
+
                 if(left==true)
                 {
                     if(board->bomb_ammount[current_pos-1]==0 && board->state[current_pos-1]=='#')
@@ -896,6 +936,8 @@ void board_shatter(board_t *board)
 
                         board->current_x=i;
                         board->current_y=j-1;
+
+                        board->points+=board->mult;
 
                         board_shatter(board);
                     }
@@ -910,6 +952,8 @@ void board_shatter(board_t *board)
                         board->current_x=i;
                         board->current_y=j+1;
 
+                        board->points+=board->mult;
+
                         board_shatter(board);
                     }
                 }
@@ -923,6 +967,8 @@ void board_shatter(board_t *board)
                         board->current_x=i-1;
                         board->current_y=j;
 
+                        board->points+=board->mult;
+
                         board_shatter(board);
                     }
                 }
@@ -935,6 +981,69 @@ void board_shatter(board_t *board)
 
                         board->current_x=i+1;
                         board->current_y=j;
+
+                        board->points+=board->mult;
+
+                        board_shatter(board);
+                    }
+                }
+
+
+                if(up_left==true)
+                {
+                    if(board->bomb_ammount[current_pos - board->y-1]==0 && board->state[current_pos - board->y-1]=='#')
+                    {
+                        board->state[current_pos-board->y-1]=' ';
+
+                        board->current_x=i-1;
+                        board->current_y=j-1;
+
+                        board->points+=board->mult;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(up_right==true)
+                {
+                    if(board->bomb_ammount[current_pos - board->y+1]==0 && board->state[current_pos - board->y+1]=='#')
+                    {
+                        board->state[current_pos-board->y+1]=' ';
+
+                        board->current_x=i-1;
+                        board->current_y=j+1;
+
+                        board->points+=board->mult;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(down_left==true)
+                {
+                    if(board->bomb_ammount[current_pos + board->y-1]==0 && board->state[current_pos + board->y-1]=='#')
+                    {
+                        board->state[current_pos+board->y-1]=' ';
+
+                        board->current_x=i+1;
+                        board->current_y=j-1;
+
+                        board->points+=board->mult;
+
+                        board_shatter(board);
+                    }
+                }
+
+                if(down_right==true)
+                {
+                    if(board->bomb_ammount[current_pos + board->y+1]==0 && board->state[current_pos + board->y+1]=='#')
+                    {
+                        board->state[current_pos+board->y+1]=' ';
+
+                        board->current_x=i+1;
+                        board->current_y=j+1;
+
+                        board->points+=board->mult;
 
                         board_shatter(board);
                     }
@@ -950,24 +1059,54 @@ void board_shatter(board_t *board)
         }
     }
 
-    if(left==true)
+
+    if(left==true && board->state[current_pos-1]!=' ')
     {
         board->state[current_pos-1]=' ';
+        board->points+=board->mult;
     }
 
-    if(right==true)
+    if(right==true && board->state[current_pos+1]!=' ')
     {
         board->state[current_pos+1]=' ';
+        board->points+=board->mult;
     }
 
-    if(up==true)
+    if(up==true && board->state[current_pos-board->y]!=' ')
     {
         board->state[current_pos-board->y]=' ';
+        board->points+=board->mult;
     }
 
-    if(down==true)
+    if(down==true && board->state[current_pos+board->y]!=' ')
     {
         board->state[current_pos+board->y]=' ';
+        board->points+=board->mult;
+    }
+
+
+    if(up_left==true && board->state[current_pos-board->y-1]!=' ')
+    {
+        board->state[current_pos-board->y-1]=' ';
+        board->points+=board->mult;
+    }
+
+    if(up_right==true && board->state[current_pos-board->y+1]!=' ')
+    {
+        board->state[current_pos-board->y+1]=' ';
+        board->points+=board->mult;
+    }
+
+    if(down_left==true && board->state[current_pos+board->y-1]!=' ')
+    {
+        board->state[current_pos+board->y-1]=' ';
+        board->points+=board->mult;
+    }
+
+    if(down_right==true && board->state[current_pos+board->y+1]!=' ')
+    {
+        board->state[current_pos+board->y+1]=' ';
+        board->points+=board->mult;
     }
 
 }
@@ -993,7 +1132,7 @@ void board_check_win(board_t *board)
     board->game=0;
 }
 
-void board_lose_out(board_t *board)
+void board_end_out(board_t *board)
 {
     int x=board->x;
     int y=board->y;

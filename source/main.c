@@ -1,12 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 //#include <stdbool.h>
 
 #include "board.h"
 
-int main()
+int main(int argc, char **argv)
 {
+    int opt, cheat;
+
+    while((opt=getopt(argc, argv, "c")) != -1)
+    {
+        switch(opt)
+        {
+            case 'c':
+                cheat=1;
+                break;
+            default:
+                cheat=0;
+                break;
+        }
+
+    }
+
     system("@cls||clear");
 
     board_t board;
@@ -23,10 +40,10 @@ int main()
     board_state_fill(&board);
     //board_state_out(&board);
 
-    board_content_fill(&board);
+    //board_content_fill(&board);
     //board_content_out(&board);
 
-    board_bomb_ammount_fill(&board);
+    //board_bomb_ammount_fill(&board);
     //board_bomb_ammount_out(&board);
     
     while(board.game==2)
@@ -37,20 +54,51 @@ int main()
 
         board_state_out(&board);
 
+        if(cheat==1 && board.actual_first==0)
+        {
+            board_content_out(&board);
+        }
+
         board_interact(&board);
 
-        if(board.game==2)
+        if(board.actual_first==1)
         {
-            board_check_win(&board);
+            board_content_fill(&board);
+            board_bomb_ammount_fill(&board);
+
+            if(board.bomb_ammount[board.first_position]==0)
+            {
+                board_shatter(&board);
+            }
+
+            board.actual_first=0;
+        }
+        else
+        {
+            if(board.game==2)
+            {
+                board_check_win(&board);
+            }
         }
     }
     
-    printf("%d\n", board.game);
+    system("@cls||clear");
 
-    if(board.game==1)
+    //printf("%d\n", board.game);
+    if(board.game==0)
     {
-        board_lose_out(&board);
+        printf("[WYGRANA]");
     }
+    else
+    {
+        printf("[PRZEGRANA]");
+    }
+
+    printf(" - Punkty końcowe: %d\n\n", board.points);
+
+    board_end_out(&board);
+
+    
 
     // board_lose_out(&board);
 
