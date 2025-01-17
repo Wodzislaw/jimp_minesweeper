@@ -220,6 +220,7 @@ void board_init(board_t *board)
     board->bomb_ammount=malloc(x * y * sizeof(int));
     board->game=2;
     board->actual_first=1;
+    board->points=0;
 
     if(temp=='c')
     {

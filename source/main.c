@@ -5,10 +5,11 @@
 //#include <stdbool.h>
 
 #include "board.h"
+#include "scoreboard.h"
 
 int main(int argc, char **argv)
 {
-    int opt, cheat;
+    int opt, cheat=0;
 
     while((opt=getopt(argc, argv, "c")) != -1)
     {
@@ -98,9 +99,21 @@ int main(int argc, char **argv)
 
     board_end_out(&board);
 
-    
+    if(cheat==0)
+    {
+        char temp[4];
 
-    // board_lose_out(&board);
+        printf("\nPodaj imię gracza (3 litery): ");
+        fgets(temp, sizeof(temp), stdin);
+
+        printf("\n");
+
+        scoreboard_t scoreboard;
+
+        scoreboard_get(&scoreboard);
+        scoreboard_edit(&scoreboard, temp, board.points);
+        scoreboard_out(&scoreboard);
+    }
 
     return EXIT_SUCCESS;
 }
