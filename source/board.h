@@ -9,7 +9,7 @@ typedef struct
     int y; // liczba kolumn
     int current_x; // obecna pozycja x
     int current_y; // obecna pozycja y
-    int time; // czas w minutach
+    int bombs; // ilość bomb na planszy
     int mult; // mnożnik punktów
     char *content; // zawartosc pola
     char *state; // stan pola
@@ -23,6 +23,8 @@ void board_init(board_t *board);
 void board_state_fill(board_t *board);
 
 void board_content_fill(board_t *board);
+
+// void board_content_fill2(board_t *board);
 
 void board_bomb_ammount_fill(board_t *board);
 

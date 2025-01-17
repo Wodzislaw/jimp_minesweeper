@@ -11,6 +11,7 @@ int main()
 
     board_t board;
     board_init(&board);
+    //bool first=true;
 
     /*
     printf("\n");
@@ -32,6 +33,8 @@ int main()
     {
         system("@cls||clear");
 
+        //printf("%d\n", board.bombs);
+
         board_state_out(&board);
 
         board_interact(&board);
@@ -48,6 +51,8 @@ int main()
     {
         board_lose_out(&board);
     }
+
+    // board_lose_out(&board);
 
     return EXIT_SUCCESS;
 }

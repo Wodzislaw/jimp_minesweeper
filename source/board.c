@@ -94,21 +94,21 @@ void board_init(board_t *board)
     
     //printf("poprawne %c\n", temp);
 
-    int x, y, time, mult, field;
+    int x, y, bombs, mult, field;
 
     if(temp=='e')
     {
-        x=9, y=9, time=10, mult=1;
+        x=9, y=9, bombs=10, mult=1;
         field=x*y;
     }
     else if(temp=='m')
     {
-        x=16, y=16, time=40, mult=2;
+        x=16, y=16, bombs=40, mult=2;
         field=x*y;
     }
     else if(temp=='h')
     {
-        x=16, y=30, time=99, mult=3;
+        x=16, y=30, bombs=99, mult=3;
         field=x*y;
     }
     else
@@ -154,6 +154,8 @@ void board_init(board_t *board)
             }
         }
 
+
+        /*
         correct=false;
         //fgets(temp, sizeof(temp), stdin);
 
@@ -172,6 +174,7 @@ void board_init(board_t *board)
                 printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
             }
         }
+        */
 
         field=x*y;
 
@@ -191,6 +194,8 @@ void board_init(board_t *board)
         {
             mult=4;
         }
+
+        bombs=field*0.2;
     }
 
 
@@ -208,7 +213,7 @@ void board_init(board_t *board)
 
     board->x=x;
     board->y=y;
-    board->time=time;
+    board->bombs=bombs;
     board->mult=mult;
     board->content=malloc(x * y * sizeof(char));
     board->state=malloc(x * y * sizeof(char));
@@ -241,6 +246,7 @@ void board_state_fill(board_t *board)
     }
 }
 
+/*
 void board_content_fill(board_t *board)
 {
     int field=board->x * board->y;
@@ -259,6 +265,33 @@ void board_content_fill(board_t *board)
         {
             board->content[i]='N';
         }
+    }
+}
+*/
+
+void board_content_fill(board_t *board)
+{
+    int field=board->x * board->y;
+    int bombs=board->bombs;
+
+    srand(time(NULL));
+    int random;
+
+    for(int i=0; i<board->x*board->y; i++)
+    {
+        random=rand() % field + 1;
+
+        if(random<=bombs)
+        {
+            bombs--;
+            board->content[i]='B';
+        }
+        else if(random>bombs)
+        {
+            board->content[i]='N';
+        }
+
+        field--;
     }
 }
 
@@ -947,9 +980,9 @@ void board_check_win(board_t *board)
 
     for(int i=0; i<size; i++)
     {
-        if(board->content[i]=='B')
+        if(board->content[i]=='N')
         {
-            if(board->state[i]!='f')
+            if(board->state[i]!=' ')
             {
                 board->game=2;
                 return;
