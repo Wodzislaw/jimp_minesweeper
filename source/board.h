@@ -21,28 +21,26 @@ typedef struct
     int first_position; // pozycja pierwszego usunięcia pola
 } board_t;
 
-void board_init(board_t *board);
+void board_init(board_t *board); // inicjalizacja struktury
 
-void board_state_fill(board_t *board);
+void board_state_fill(board_t *board); // wypełnienie tablicy state
 
-void board_content_fill(board_t *board);
+void board_content_fill(board_t *board); // wypełnienie tablicy content
 
-// void board_content_fill2(board_t *board);
+void board_bomb_ammount_fill(board_t *board); // wypełnienie tablicy bomb_ammount
 
-void board_bomb_ammount_fill(board_t *board);
+void board_state_out(board_t *board); // wypisanie zawartości tablicy state
 
-void board_state_out(board_t *board);
+void board_content_out(board_t *board); // wypisanie zawartości tablicy content
 
-void board_content_out(board_t *board);
+void board_bomb_ammount_out(board_t *board); // wypisanie zawartości tablicy bomb_ammount
 
-void board_bomb_ammount_out(board_t *board);
+void board_interact(board_t *board); // wejście w interakcję z planszą
 
-void board_interact(board_t *board);
+void board_shatter(board_t *board); // czyszczenie się sąsiednich pól zerowych
 
-void board_shatter(board_t *board);
+void board_check_win(board_t *board); // sprawdzenie warunków wygranej
 
-void board_check_win(board_t *board);
-
-void board_end_out(board_t *board);
+void board_end_out(board_t *board); // wypisanie planszy z widocznymi bombami oraz stanem planszy
 
 #endif

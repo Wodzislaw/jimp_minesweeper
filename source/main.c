@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-//#include <stdbool.h>
 
 #include "board.h"
 #include "scoreboard.h"
@@ -29,14 +28,6 @@ int main(int argc, char **argv)
 
     board_t board;
     board_init(&board);
-    //bool first=true;
-
-    /*
-    printf("\n");
-    printf("x = %d\n", board.x);
-    printf("y = %d\n", board.y);
-    printf("t = %d\n", board.time);
-    */
 
     board_state_fill(&board);
     //board_state_out(&board);
@@ -50,8 +41,6 @@ int main(int argc, char **argv)
     while(board.game==2)
     {
         system("@cls||clear");
-
-        //printf("%d\n", board.bombs);
 
         board_state_out(&board);
 
@@ -85,7 +74,6 @@ int main(int argc, char **argv)
     
     system("@cls||clear");
 
-    //printf("%d\n", board.game);
     if(board.game==0)
     {
         printf("[WYGRANA]");

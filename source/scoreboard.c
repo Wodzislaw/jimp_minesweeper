@@ -18,6 +18,7 @@ void scoreboard_get(scoreboard_t *scoreboard)
     fclose(in);
 }
 
+
 void scoreboard_edit(scoreboard_t *scoreboard, char* name, int points)
 {
     int temp=MAX_LINES;
@@ -55,6 +56,7 @@ void scoreboard_edit(scoreboard_t *scoreboard, char* name, int points)
 
     printf("\n");
 }
+
 
 void scoreboard_out(scoreboard_t *scoreboard)
 {

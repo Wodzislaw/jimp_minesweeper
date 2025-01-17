@@ -10,10 +10,10 @@ typedef struct
     int points[MAX_LINES]; // liczba punktów graczy
 } scoreboard_t;
 
-void scoreboard_get(scoreboard_t *scoreboard);
+void scoreboard_get(scoreboard_t *scoreboard); // wpisanie wartości z pliku do struktury
 
-void scoreboard_edit(scoreboard_t *scoreboard, char* name, int points);
+void scoreboard_edit(scoreboard_t *scoreboard, char* name, int points); // dodanie nowego wyniku
 
-void scoreboard_out(scoreboard_t *scoreboard);
+void scoreboard_out(scoreboard_t *scoreboard); // wpisanie nowego rankingu do pliku
 
 #endif

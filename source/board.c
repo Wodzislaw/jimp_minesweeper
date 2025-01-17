@@ -28,25 +28,6 @@ char board_mode()
     }
 }
 
-/*
-int board_int()
-{
-    char temp[5];
-    fgets(temp, sizeof(temp), stdin);
-    int x = atoi(temp);
-
-    //printf("%d\n", x);
-
-    if(x>0)
-    {
-        return x;
-    }
-    else
-    {
-        return 0;
-    }
-}
-*/
 
 int board_int()
 {
@@ -72,6 +53,7 @@ int board_int()
     }
 }
 
+
 void board_init(board_t *board)
 {
     bool correct=false;
@@ -86,8 +68,6 @@ void board_init(board_t *board)
         }
         else
         {
-            //sleep(1);
-            //system("@cls||clear");
             getc(stdin);
         }
     }
@@ -113,7 +93,6 @@ void board_init(board_t *board)
     }
     else
     {
-        //scanf("%c");
         bool correct=false;
         char temp[4];
 
@@ -154,28 +133,6 @@ void board_init(board_t *board)
             }
         }
 
-
-        /*
-        correct=false;
-        //fgets(temp, sizeof(temp), stdin);
-
-        while(correct==false)
-        {
-            printf("Podaj ilosc czasu (w minutach, do dwoch znakow): ");
-
-            time=board_int();
-
-            if(time!=0)
-            {
-                correct=true;
-            }
-            else
-            {
-                printf("[!] Niepoprawne wyrazenie, sprobuj ponownie\n");
-            }
-        }
-        */
-
         field=x*y;
 
         if(field<=81)
@@ -207,10 +164,6 @@ void board_init(board_t *board)
     printf("m = %d\n", mult);
     */
 
-    //int bombs=field/5;
-
-    //printf("b = %d\n", bombs);
-
     board->x=x;
     board->y=y;
     board->bombs=bombs;
@@ -234,6 +187,7 @@ void board_init(board_t *board)
     return;
 }
 
+
 void board_state_fill(board_t *board)
 {
     int x=board->x;
@@ -248,28 +202,6 @@ void board_state_fill(board_t *board)
     }
 }
 
-/*
-void board_content_fill(board_t *board)
-{
-    int field=board->x * board->y;
-
-    srand(time(NULL));
-    int random;
-    for(int i=0; i<field; i++)
-    {
-        random=rand() % 100 + 1;
-        
-        if(random<=15)
-        {
-            board->content[i]='B';
-        }
-        else
-        {
-            board->content[i]='N';
-        }
-    }
-}
-*/
 
 void board_content_fill(board_t *board)
 {
@@ -297,65 +229,6 @@ void board_content_fill(board_t *board)
     }
 }
 
-/*
-void board_bomb_ammount_fill(board_t *board)
-{
-    int x=board->x;
-    int y=board->y;
-    int field=x*y;
-
-    for(int i=0; i<field; i++)
-    {
-        if(i%y!=0)
-        {
-            if(i-y-1 >= 0)
-            {
-                board->bomb_ammount[i]++;
-            }
-
-            if(i-1 >= 0)
-            {
-                board->bomb_ammount[i]++;
-            }
-
-            if(i+y-1 < field)
-            {
-                board->bomb_ammount[i]++;
-            }
-        }
-
-
-        if(i-y >= 0)
-        {
-            board->bomb_ammount[i]++;
-        }
-
-        if(i+y < field)
-        {
-            board->bomb_ammount[i]++;
-        }
-
-
-        if(i%(y-1)!=0)
-        {
-            if(i-y+1 >= 0)
-            {
-                board->bomb_ammount[i]++;
-            }
-
-            if(i+1 < field)
-            {
-                board->bomb_ammount[i]++;
-            }
-
-            if(i+y+1 < field)
-            {
-                board->bomb_ammount[i]++;
-            }
-        }
-    }
-}
-*/
 
 void board_bomb_ammount_fill(board_t *board)
 {
@@ -606,6 +479,7 @@ void board_bomb_ammount_fill(board_t *board)
     }
 }
 
+
 void board_state_out(board_t *board)
 {
     int x=board->x;
@@ -655,6 +529,7 @@ void board_state_out(board_t *board)
     printf("\n x\n");
 }
 
+
 void board_content_out(board_t *board)
 {
     int x=board->x;
@@ -693,6 +568,7 @@ void board_content_out(board_t *board)
 
     printf("\n x\n");
 }
+
 
 void board_bomb_ammount_out(board_t *board)
 {
@@ -733,15 +609,12 @@ void board_bomb_ammount_out(board_t *board)
     printf("\n x\n");
 }
 
+
 void board_interact(board_t *board)
 {
     char function;
     int x, y;
     bool correct=false;
-        
-    //printf("Podaj operację którą chcesz wykonać (f - flaga, r - odsłoń pole): ");
-    //getc(stdin);
-    //function=getc(stdin);
     
     while(correct==false)
     {
@@ -816,8 +689,6 @@ void board_interact(board_t *board)
 
     int pos=(x-1)*board->y + (y-1);
 
-    //printf("%d\n", pos);
-
     if(board->actual_first==1)
     {
         board->first_position=pos;
@@ -825,8 +696,6 @@ void board_interact(board_t *board)
 
     if(function=='f')
     {
-        //board->last_action='f';
-
         if(board->state[pos]=='#')
         {
             board->state[pos]='f';
@@ -838,7 +707,6 @@ void board_interact(board_t *board)
     }
     else
     {
-        //board->last_action='r';
         if(board->state[pos]==' ')
         {
             return;
@@ -863,22 +731,15 @@ void board_interact(board_t *board)
             }
         }
     }
-
-
 }
 
 void board_shatter(board_t *board)
 {
-    // printf("%d, %d\n", board->current_x, board->current_y);
-
     int pos=board->current_x * board->y + board->current_y;
     int current_pos;
 
-    //printf("%d, %d, %d\n", board->current_x, board->current_y, pos);
-
     bool up=true, left=true, right=true, down=true;
     bool end=false;
-
     bool up_left=false, up_right=false, down_left=false, down_right=false;
 
     for(int i=0; i<board->x; i++)
