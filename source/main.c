@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
         board_interact(&board);
 
-        if(board.actual_first==1)
+        if(board.actual_first==1 && board.state[board.first_position]==' ')
         {
             board_content_fill(&board);
             board_bomb_ammount_fill(&board);
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 
             board.actual_first=0;
         }
-        else
+        else if(board.actual_first==0)
         {
             if(board.game==2)
             {

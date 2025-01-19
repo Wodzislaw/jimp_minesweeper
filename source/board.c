@@ -707,7 +707,7 @@ void board_interact(board_t *board)
     }
     else
     {
-        if(board->state[pos]==' ')
+        if(board->state[pos]==' ' || board->state[pos]=='f')
         {
             return;
         }
